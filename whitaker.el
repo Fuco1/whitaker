@@ -1,12 +1,28 @@
-(require 's)
+;;; whitaker.el --- Comint interface for Whitaker's Words
 
-(defgroup dired-filter ()
-  "Ibuffer-like filtering for dired."
-  :group 'processes
-  :prefix "dired-filter-")
+;; Copyright (C) 2014 Matus Goljer
+
+;; Author: Matus Goljer <matus.goljer@gmail.com>
+;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
+;; Keywords: processes
+;; Version: 0.0.1
+;; Created: 12th March 2014
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (defgroup whitaker ()
-  "Comint interface to Whitaker's words."
+  "Comint interface for Whitaker's words."
   :prefix "whitaker-")
 
 (defcustom whitaker-program "words"
@@ -31,7 +47,12 @@ available."
 
 ;;;###autoload
 (defun whitaker (&optional no-select)
-  "Docs"
+  "Start a new whitaker process if it doesn't already exist.
+
+When the process is started, pop to the associated buffer.
+
+If optional argument NO-SELECT is non-nil, only display the
+buffer."
   (interactive)
   (let ((buffer (get-buffer-create whitaker-buffer-name)))
     (if no-select
@@ -40,7 +61,6 @@ available."
     (with-current-buffer buffer
       (unless (comint-check-proc buffer)
         (let* ((prog (or explicit-shell-file-name
-                         (getenv "ESHELL")
                          shell-file-name)))
           (make-comint-in-buffer "whitaker"
                                  buffer
@@ -52,7 +72,10 @@ available."
 
 ;;;###autoload
 (defun whitaker-send-word (word)
-  "Docs"
+  "Send the WORD under point to the whitaker comint buffer.
+
+This buffer is recognized by searching for buffer with name
+`whitaker-buffer-name'."
   (interactive (list (word-at-point)))
   (-if-let (buffer (get-buffer whitaker-buffer-name))
       (with-current-buffer buffer
@@ -82,9 +105,11 @@ automatically send a return to the process and remove the empty lines."
       (delete-char -1))))
 
 (define-derived-mode whitaker-mode comint-mode "Whitaker-Words"
-  "Docs"
+  "Major mode for the whitaker comint buffer."
   (setq comint-prompt-regexp "=>")
   (setq comint-prompt-echoes t)
   (add-hook 'comint-output-filter-functions 'whitaker--watch-for-more-input nil t))
 
 (provide 'whitaker)
+
+;;; whitaker.el ends here
