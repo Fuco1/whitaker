@@ -112,7 +112,7 @@ automatically send a return to the process and remove the empty lines."
 (define-derived-mode whitaker-mode comint-mode "Whitaker-Words"
   "Major mode for the whitaker comint buffer."
   (setq comint-prompt-regexp "=>")
-  (setq comint-prompt-echoes t)
+  (setq comint-process-echoes t)
   (add-hook 'comint-output-filter-functions 'whitaker--watch-for-more-input nil t))
 
 (provide 'whitaker)
