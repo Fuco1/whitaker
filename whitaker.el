@@ -5,7 +5,7 @@
 ;; Author: Matus Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
 ;; Keywords: processes
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; Created: 12th March 2014
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -71,20 +71,25 @@ buffer."
           (whitaker-mode))))))
 
 ;;;###autoload
-(defun whitaker-send-word (word)
+(defun whitaker-send-input (word-or-region)
   "Send the WORD under point to the whitaker comint buffer.
+
+If a region is active and `use-region-p' returns non-nil, the
+active region is sent instead.
 
 This buffer is recognized by searching for buffer with name
 `whitaker-buffer-name'."
-  (interactive (list (word-at-point)))
+  (interactive (list (if (use-region-p)
+                         (buffer-substring-no-properties (region-beginning) (region-end))
+                       (word-at-point))))
   (-if-let (buffer (get-buffer whitaker-buffer-name))
       (with-current-buffer buffer
         (display-buffer buffer nil t)
         (comint-goto-process-mark)
-        (insert word)
+        (insert word-or-region)
         (comint-send-input))
     (whitaker t)
-    (whitaker-send-word word)))
+    (whitaker-send-word word-or-region)))
 
 
 ;;; whitaker comint mode
