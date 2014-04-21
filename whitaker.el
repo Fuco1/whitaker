@@ -42,8 +42,29 @@ available."
   :type 'string
   :group 'whitaker)
 
+(defvar whitaker-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-e") 'whitaker-switch-to-english)
+    (define-key map (kbd "C-c C-l") 'whitaker-switch-to-latin)
+    map)
+  "Map for whitaker-words.")
+
 
 ;;; interactive
+
+(defun whitaker-switch-to-latin ()
+  "Switch to latin-to-english search."
+  (interactive)
+  (--when-let (get-buffer whitaker-buffer-name)
+    (insert "~L")
+    (comint-send-input)))
+
+(defun whitaker-switch-to-english ()
+  "Switch to english-to-latin search."
+  (interactive)
+  (--when-let (get-buffer whitaker-buffer-name)
+    (insert "~E")
+    (comint-send-input)))
 
 ;;;###autoload
 (defun whitaker (&optional no-select)
@@ -113,6 +134,7 @@ automatically send a return to the process and remove the empty lines."
   "Major mode for the whitaker comint buffer."
   (setq comint-prompt-regexp "=>")
   (setq comint-process-echoes t)
+  (use-local-map whitaker-mode-map)
   (add-hook 'comint-output-filter-functions 'whitaker--watch-for-more-input nil t))
 
 (provide 'whitaker)
