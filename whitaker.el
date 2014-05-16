@@ -112,6 +112,24 @@ This buffer is recognized by searching for buffer with name
     (whitaker t)
     (whitaker-send-input word-or-region)))
 
+(defvar whitaker--ace-jump-save-position nil
+  "Position to jump back to after word is sent to the whitaker
+buffer.")
+
+(defun whitaker--ace-jump-helper ()
+  (whitaker-send-input (word-at-point))
+  (goto-char whitaker--ace-jump-save-position)
+  (remove-hook 'ace-jump-mode-end-hook 'whitaker--ace-jump-helper))
+
+;;;###autoload
+(defun whitaker-ace-jump (char)
+  "Jump to location by calling `ace-jump-mode', then send the
+word under point to whitaker buffer."
+  (interactive (list (read-char "Head Char:")))
+  (setq whitaker--ace-jump-save-position (point))
+  (ace-jump-word-mode char)
+  (add-hook 'ace-jump-mode-end-hook 'whitaker--ace-jump-helper))
+
 
 ;;; whitaker comint mode
 (defun whitaker--watch-for-more-input (original)
