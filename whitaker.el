@@ -110,7 +110,7 @@ This buffer is recognized by searching for buffer with name
         (insert word-or-region)
         (comint-send-input))
     (whitaker t)
-    (whitaker-send-word word-or-region)))
+    (whitaker-send-input word-or-region)))
 
 
 ;;; whitaker comint mode
