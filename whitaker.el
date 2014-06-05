@@ -120,13 +120,11 @@ This buffer is recognized by searching for buffer with name
   "Jump to location by using `better-jump', then send the word
 under point to whitaker buffer."
   (interactive "cHead char: ")
-  (bjump-jump-cw
-   (bjump-selector-char char)
-   'bjump-picker-single-letter
-   (lambda (ov)
-     (save-excursion
-       (goto-char (ov-beg ov))
-       (whitaker-send-input (word-at-point))))))
+  (bjump-jump char
+              :action (lambda (ov)
+                        (save-excursion
+                          (goto-char (ov-beg ov))
+                          (whitaker-send-input (word-at-point))))))
 
 
 ;;; whitaker comint mode
