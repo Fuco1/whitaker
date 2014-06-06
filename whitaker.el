@@ -121,10 +121,9 @@ This buffer is recognized by searching for buffer with name
 under point to whitaker buffer."
   (interactive "cHead char: ")
   (bjump-jump char
-              :action (lambda (ov)
-                        (save-excursion
-                          (goto-char (ov-beg ov))
-                          (whitaker-send-input (word-at-point))))))
+              :action (bjump-com-at-char-execute
+                       (lambda ()
+                         (whitaker-send-input (word-at-point))))))
 
 
 ;;; whitaker comint mode
