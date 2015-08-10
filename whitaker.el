@@ -24,6 +24,9 @@
 (require 'dash)
 (require 'better-jump)
 
+(require 'comint)
+(require 'ring)
+
 (defgroup whitaker ()
   "Comint interface for Whitaker's words."
   :prefix "whitaker-")
@@ -60,14 +63,17 @@ available."
   (interactive)
   (--when-let (get-buffer whitaker-buffer-name)
     (insert "~L")
-    (comint-send-input)))
+    (comint-send-input)
+    (ring-remove comint-input-ring 0)))
 
 (defun whitaker-switch-to-english ()
   "Switch to english-to-latin search."
   (interactive)
   (--when-let (get-buffer whitaker-buffer-name)
     (insert "~E")
-    (comint-send-input)))
+    (comint-send-input)
+    (ring-remove comint-input-ring 0)))
+
 
 ;;;###autoload
 (defun whitaker (&optional no-select)
