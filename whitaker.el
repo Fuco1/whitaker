@@ -58,6 +58,7 @@ available."
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-e") 'whitaker-switch-to-english)
     (define-key map (kbd "C-c C-l") 'whitaker-switch-to-latin)
+    (define-key map (kbd "C-c C-c") 'whitaker-switch-language)
     map)
   "Map for whitaker-words.")
 
@@ -80,6 +81,19 @@ available."
     (comint-send-input)
     (ring-remove comint-input-ring 0)))
 
+(defun whitaker-switch-language ()
+  "Switch to other language."
+  (interactive)
+  (--when-let (get-buffer whitaker-buffer-name)
+    (let ((to-english (save-excursion
+                        (if (re-search-backward "Language changed to " nil t)
+                            (progn
+                              (forward-char 20)
+                              (looking-at-p "L"))
+                          t))))
+      (if to-english
+          (whitaker-switch-to-english)
+        (whitaker-switch-to-latin)))))
 
 ;;;###autoload
 (defun whitaker (&optional no-select)
