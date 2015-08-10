@@ -21,6 +21,12 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;; Comint interface for Whitaker's Words.
+
+;;; Code:
+
 (require 'dash)
 (require 'better-jump)
 
@@ -102,10 +108,10 @@ buffer."
 
 ;;;###autoload
 (defun whitaker-send-input (word-or-region)
-  "Send the WORD under point to the whitaker comint buffer.
+  "Send WORD-OR-REGION to the whitaker comint buffer.
 
 If a region is active and `use-region-p' returns non-nil, the
-active region is sent instead.
+active region is sent, otherwise the word under point..
 
 This buffer is recognized by searching for buffer with name
 `whitaker-buffer-name'."
@@ -123,8 +129,7 @@ This buffer is recognized by searching for buffer with name
 
 ;;;###autoload
 (defun whitaker-jump (char)
-  "Jump to location by using `better-jump', then send the word
-under point to whitaker buffer."
+  "Jump to CHAR by using `better-jump' and send to whitaker."
   (interactive "cHead char: ")
   (bjump-jump char
               :action (bjump-com-at-char-execute
