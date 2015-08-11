@@ -5,7 +5,8 @@
 ;; Author: Matus Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
 ;; Keywords: processes
-;; Version: 0.0.2
+;; Version: 0.0.3
+;; Package-requires: ((dash "2.10.0"))
 ;; Created: 12th March 2014
 
 ;; This program is free software; you can redistribute it and/or modify
