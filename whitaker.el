@@ -28,7 +28,7 @@
 ;;; Code:
 
 (require 'dash)
-(require 'better-jump)
+(require 'better-jump nil t)
 
 (require 'comint)
 (require 'ring)
@@ -146,10 +146,11 @@ This buffer is recognized by searching for buffer with name
 (defun whitaker-jump (char)
   "Jump to CHAR by using `better-jump' and send to whitaker."
   (interactive "cHead char: ")
-  (bjump-jump char
-              :action (bjump-com-at-char-execute
-                       (lambda ()
-                         (whitaker-send-input (word-at-point))))))
+  (when (featurep 'better-jump)
+    (bjump-jump char
+                :action (bjump-com-at-char-execute
+                         (lambda ()
+                           (whitaker-send-input (word-at-point)))))))
 
 
 ;;; whitaker comint mode
