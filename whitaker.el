@@ -32,6 +32,7 @@
 
 (require 'comint)
 (require 'ring)
+(require 'term)
 
 (defgroup whitaker ()
   "Comint interface for Whitaker's words."
