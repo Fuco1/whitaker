@@ -6,7 +6,7 @@
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
 ;; Keywords: processes
 ;; Version: 0.0.3
-;; Package-requires: ((dash "2.10.0"))
+;; Package-requires: ((emacs "25"))
 ;; Created: 12th March 2014
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,6 @@
 
 ;;; Code:
 
-(require 'dash)
 (require 'better-jump nil t)
 
 (require 'comint)
@@ -71,7 +70,7 @@ available."
 (defun whitaker-switch-to-latin ()
   "Switch to latin-to-english search."
   (interactive)
-  (--when-let (get-buffer whitaker-buffer-name)
+  (when (get-buffer whitaker-buffer-name)
     (insert "~L")
     (comint-send-input)
     (ring-remove comint-input-ring 0)))
@@ -79,7 +78,7 @@ available."
 (defun whitaker-switch-to-english ()
   "Switch to english-to-latin search."
   (interactive)
-  (--when-let (get-buffer whitaker-buffer-name)
+  (when (get-buffer whitaker-buffer-name)
     (insert "~E")
     (comint-send-input)
     (ring-remove comint-input-ring 0)))
@@ -87,7 +86,7 @@ available."
 (defun whitaker-switch-language ()
   "Switch to other language."
   (interactive)
-  (--when-let (get-buffer whitaker-buffer-name)
+  (when (get-buffer whitaker-buffer-name)
     (let ((to-english (save-excursion
                         (if (re-search-backward "Language changed to " nil t)
                             (progn
@@ -135,7 +134,7 @@ This buffer is recognized by searching for buffer with name
   (interactive (list (if (use-region-p)
                          (buffer-substring-no-properties (region-beginning) (region-end))
                        (word-at-point))))
-  (-if-let (buffer (get-buffer whitaker-buffer-name))
+  (if-let ((buffer (get-buffer whitaker-buffer-name)))
       (with-current-buffer buffer
         (display-buffer buffer nil t)
         (comint-goto-process-mark)
